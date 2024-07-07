@@ -1,0 +1,40 @@
+---
+import Tag from "./icons/Tag.astro";
+
+interface Props {
+    date: Date;
+    excerpt?: string;
+    href: string;
+    image?: string;
+    alt?: string;
+    title: string;
+    tags: string[];
+}
+
+const { title, date, image, alt, excerpt, href, tags } = Astro.props;
+---
+
+<article class="md: max-w-screen-sm lg:max-w-screen-md">
+    <a href={href}>
+        <h1 class="font-serif text-lg">{title}</h1>
+        <h2 class="text-xs font-bold inline">{date.toDateString()}</h2>
+        <ol class="text-right space-x-2">
+            {
+                tags.map((tag) => (
+                    <li class="inline">
+                        <span class="text-xs">
+                            <Tag class="inline" />
+                            {tag}
+                        </span>
+                    </li>
+                ))
+            }
+        </ol>
+        <img
+            src={image}
+            alt={alt || title}
+            class="mt-1 h-96 w-full object-cover"
+        />
+        <p class="text-lg mt-4">{excerpt}</p>
+    </a>
+</article>

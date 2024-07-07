@@ -1,0 +1,118 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Article from "../components/Article.astro";
+import { getCollection } from "astro:content";
+
+const recentPosts = await getCollection("blog");
+---
+
+<Layout title="alexanderflink.com">
+    <section
+        id="intro-text"
+        class="py-48 intro-text col-span-full text-3xl lg:text-4xl links"
+    >
+        <div class="animation">
+            <p>
+                Web developer currently working at <a
+                    href="https://www.noaignite.se">noaignite.se</a
+                >
+            </p>
+            <p class="mt-6">
+                Find me on <a href="https://www.github.com/alexanderflink"
+                    >github</a
+                > and <a href="https://www.linkedin.com">LinkedIn</a>
+            </p>
+            <p class="text-xl mt-6 lg:mt-14">
+                or email me at <a href="mailto:hi@alexanderflink.com"
+                    >hi@alexanderflink.com</a
+                >
+            </p>
+        </div>
+    </section>
+    <section class="col-span-full">
+        <h1 class="text-2xl">Recent ramblings</h1>
+        <ul class="mt-4">
+            <li>
+                {
+                    recentPosts.map((post) => (
+                        <Article href={`/blog/${post.slug}`} {...post.data} />
+                    ))
+                }
+            </li>
+        </ul>
+    </section>
+</Layout>
+
+<style>
+    .links {
+        a {
+            position: relative;
+        }
+        a::after {
+            z-index: -1;
+            content: " ";
+            height: 20%;
+            width: calc(100% + 10px);
+            bottom: 5px;
+            left: -5px;
+            background-color: yellow;
+            position: absolute;
+            @apply bg-yellow-300;
+        }
+    }
+
+    .intro-text {
+        perspective: 1000px;
+    }
+
+    @keyframes rotateIntroText {
+        0% {
+            transform: rotateY(0deg);
+        }
+        50% {
+            transform: rotateY(20deg) rotateX(20deg);
+        }
+        100% {
+            transform: rotateY(0deg);
+        }
+    }
+</style>
+
+<script>
+    import { gsap } from "gsap";
+
+    document.addEventListener("astro:page-load", (e) => {
+        const animation = document.querySelector(".animation");
+
+        if (!animation) return;
+
+        const { innerWidth, innerHeight } = window;
+        let x = 0;
+        let y = 0;
+
+        document.addEventListener("mouseleave", () => {
+            x = 0;
+            y = 0;
+        });
+
+        window.addEventListener("mousemove", (e) => {
+            const { clientX, clientY } = e;
+
+            // map clientX and clientY to a range of -1 to 1
+            x = (clientX / innerWidth) * 2 - 1;
+            y = ((clientY / innerHeight) * 2 - 1) * -1;
+        });
+
+        function update() {
+            gsap.to(animation, {
+                rotateY: x * 20,
+                rotateX: y * 20,
+                duration: 1,
+            });
+
+            requestAnimationFrame(update);
+        }
+
+        requestAnimationFrame(update);
+    });
+</script>

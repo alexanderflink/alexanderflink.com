@@ -1,0 +1,22 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Prose from "../../components/Prose.astro";
+import { getEntryBySlug, getCollection } from "astro:content";
+
+export function getStaticPaths() {
+    return [{ params: { post: "hello-world" } }];
+}
+
+const { post } = Astro.params;
+const entry = await getEntryBySlug("blog", post);
+
+const { Content } = await entry.render();
+---
+
+<Layout title="Hello World">
+    <article class="col-span-full">
+        <Prose>
+            <Content />
+        </Prose>
+    </article>
+</Layout>
