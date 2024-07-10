@@ -16,20 +16,24 @@ const { title, date, image, alt, excerpt, href, tags } = Astro.props;
 
 <article class="md: max-w-screen-sm lg:max-w-screen-md">
     <a href={href}>
-        <h1 class="font-serif text-2xl">{title}</h1>
-        <h2 class="text-xs font-bold inline">{date.toDateString()}</h2>
-        <ol class="text-right space-x-2">
-            {
-                tags.map((tag) => (
-                    <li class="inline">
-                        <span class="text-xs">
-                            <Tag class="inline" />
-                            {tag}
-                        </span>
-                    </li>
-                ))
-            }
-        </ol>
+        <div class="flex justify-between items-end">
+            <div>
+                <h1 class="font-serif text-2xl">{title}</h1>
+                <h2 class="text-xs font-bold inline">{date.toDateString()}</h2>
+            </div>
+            <ol class="text-right space-x-2">
+                {
+                    tags.map((tag) => (
+                        <li class="inline">
+                            <span class="text-xs">
+                                <Tag class="inline" />
+                                {tag}
+                            </span>
+                        </li>
+                    ))
+                }
+            </ol>
+        </div>
         <img
             src={image}
             alt={alt || title}
