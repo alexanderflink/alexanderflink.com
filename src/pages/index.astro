@@ -9,18 +9,20 @@ const recentPosts = await getCollection("blog");
 <Layout title="alexanderflink.com">
     <section
         id="intro-text"
-        class="py-48 intro-text col-span-full text-3xl lg:text-4xl links"
+        class="py-20 lg:py-48 intro-text col-span-full text-3xl font-light lg:text-4xl links"
     >
         <div class="animation">
             <p>
                 Web developer currently working at <a
-                    href="https://www.noaignite.se">noaignite.se</a
+                    href="https://noaignite.se">noaignite.se</a
                 >
             </p>
             <p class="mt-6">
-                Find me on <a href="https://www.github.com/alexanderflink"
-                    >github</a
-                > and <a href="https://www.linkedin.com">LinkedIn</a>
+                Find me on <a href="https://github.com/alexanderflink">github</a
+                > and <a
+                    href="https://www.linkedin.com/in/alexander-flink-842b1914a"
+                    >LinkedIn</a
+                >
             </p>
             <p class="text-xl mt-6 lg:mt-14">
                 or email me at <a href="mailto:hi@alexanderflink.com"
@@ -30,8 +32,8 @@ const recentPosts = await getCollection("blog");
         </div>
     </section>
     <section class="col-span-full">
-        <h1 class="text-2xl">Recent ramblings</h1>
-        <ul class="mt-4">
+        <h1 class="text-4xl">Blog posts</h1>
+        <ul class="mt-10">
             <li>
                 {
                     recentPosts.map((post) => (
@@ -47,6 +49,12 @@ const recentPosts = await getCollection("blog");
     .links {
         a {
             position: relative;
+            font-weight: 600;
+        }
+        a:hover::after {
+            animation:
+                underlines-scale 1s,
+                underlines-origin 1s step-end;
         }
         a::after {
             z-index: -1;
@@ -58,61 +66,29 @@ const recentPosts = await getCollection("blog");
             background-color: yellow;
             position: absolute;
             @apply bg-yellow-300;
+            transform-origin: 100% 0%;
         }
     }
 
-    .intro-text {
-        perspective: 1000px;
-    }
-
-    @keyframes rotateIntroText {
+    @keyframes underlines-scale {
         0% {
-            transform: rotateY(0deg);
+            transform: scaleX(100%);
         }
         50% {
-            transform: rotateY(20deg) rotateX(20deg);
+            transform: scaleX(0%);
         }
         100% {
-            transform: rotateY(0deg);
+            transform: scaleX(100%);
+        }
+    }
+
+    @keyframes underlines-origin {
+        50% {
+            transform-origin: 0% 0%;
         }
     }
 </style>
 
 <script>
-    import { gsap } from "gsap";
-
-    document.addEventListener("astro:page-load", (e) => {
-        const animation = document.querySelector(".animation");
-
-        if (!animation) return;
-
-        const { innerWidth, innerHeight } = window;
-        let x = 0;
-        let y = 0;
-
-        document.addEventListener("mouseleave", () => {
-            x = 0;
-            y = 0;
-        });
-
-        window.addEventListener("mousemove", (e) => {
-            const { clientX, clientY } = e;
-
-            // map clientX and clientY to a range of -1 to 1
-            x = (clientX / innerWidth) * 2 - 1;
-            y = ((clientY / innerHeight) * 2 - 1) * -1;
-        });
-
-        function update() {
-            gsap.to(animation, {
-                rotateY: x * 20,
-                rotateX: y * 20,
-                duration: 1,
-            });
-
-            requestAnimationFrame(update);
-        }
-
-        requestAnimationFrame(update);
-    });
+    document.addEventListener("astro:page-load", (e) => {});
 </script>

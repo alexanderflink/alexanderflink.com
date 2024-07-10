@@ -16,7 +16,7 @@ const { title, date, image, alt, excerpt, href, tags } = Astro.props;
 
 <article class="md: max-w-screen-sm lg:max-w-screen-md">
     <a href={href}>
-        <h1 class="font-serif text-lg">{title}</h1>
+        <h1 class="font-serif text-2xl">{title}</h1>
         <h2 class="text-xs font-bold inline">{date.toDateString()}</h2>
         <ol class="text-right space-x-2">
             {

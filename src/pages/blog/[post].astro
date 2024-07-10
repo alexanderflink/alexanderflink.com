@@ -1,6 +1,7 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import Prose from "../../components/Prose.astro";
+import BackArrow from "../../components/icons/BackArrow.astro";
 import { getEntryBySlug, getCollection } from "astro:content";
 
 export function getStaticPaths() {
@@ -15,7 +16,10 @@ const { Content } = await entry.render();
 
 <Layout title="Hello World">
     <article class="col-span-full">
-        <Prose>
+        <a href="/" class="text-sm text-slate-400 space-x-2 flex items-center">
+            <BackArrow class="inline size-3" /><span class="inline">Home</span>
+        </a>
+        <Prose class="mt-4">
             <Content />
         </Prose>
     </article>

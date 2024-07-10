@@ -10,7 +10,7 @@ const { title } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en" class="h-full">
+<html lang="en" class="h-full" transition:animate="none">
     <head>
         <meta charset="UTF-8" />
         <meta name="description" content="Astro description" />
@@ -21,7 +21,7 @@ const { title } = Astro.props;
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link
-            href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=DM+Serif+Display:ital@0;1&display=swap"
+            href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=DM+Serif+Display:ital@0;1"
             rel="stylesheet"
         />
         <ViewTransitions />
@@ -30,22 +30,12 @@ const { title } = Astro.props;
         class="px-5 md:px-10 lg:px-20 h-full max-w-screen-xl mx-auto flex flex-col"
     >
         <header
-            class="py-4 flex justify-between items-center md:py-10 lg:py-20"
+            class="py-10 flex justify-between items-center md:py-10 lg:py-20"
             transition:persist
         >
-            <a href="/" class="w-[50vw] min-w-48 max-w-96">
+            <a href="/" class="w-[50vw] min-w-60 max-w-96">
                 <AnimatedLogo class="w-full h-auto" />
             </a>
-            <nav class="-col-start-1 -col-end-3">
-                <ul
-                    class="flex justify-end gap-4 w-full font-serif text-md md:text-lg md:gap-10 lg:text-xl lg:gap-20"
-                >
-                    <li><a href="/blog">blog</a></li>
-                    <li>
-                        <a href="https://github.com/alexanderflink">github</a>
-                    </li>
-                </ul>
-            </nav>
         </header>
         <main
             class="flex-grow-1 space-y-10 py-5 grid grid-cols-4 gap-x-4 md:grid-cols-8 lg:grid-cols-12"
@@ -163,7 +153,7 @@ const { title } = Astro.props;
                     program.uniforms.uMouse.value = [x, y];
 
                     // Don't need a camera if camera uniforms aren't required
-                    renderer.render({ scene: mesh });
+                    // renderer.render({ scene: mesh });
                 }
             });
         </script>

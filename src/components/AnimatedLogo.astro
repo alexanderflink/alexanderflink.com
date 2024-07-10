@@ -11,6 +11,10 @@ const { class: className } = Astro.props;
     // update image value with source once loaded
     const img = new Image();
     img.src = "/logo.png";
+
+    const noiseImage = new Image();
+    noiseImage.src = "/noise.jpg";
+
     img.onload = () => {
         const renderer = new Renderer({
             canvas: logoCanvas as HTMLCanvasElement,
@@ -25,6 +29,14 @@ const { class: className } = Astro.props;
 
         const texture = new Texture(gl);
         texture.image = img;
+
+        const noiseTexture = new Texture(gl, {
+            wrapS: gl.REPEAT,
+            wrapT: gl.REPEAT,
+            minFilter: gl.LINEAR_MIPMAP_LINEAR,
+        });
+
+        noiseTexture.image = noiseImage;
 
         const geometry = new Geometry(gl, {
             position: {
@@ -50,34 +62,54 @@ const { class: className } = Astro.props;
             precision highp float;
 
             uniform float uTime;
-            uniform float uFadeInDuration;
+            uniform vec2 uAspectRatio;
             uniform sampler2D uTexture;
-            uniform vec2 uFocusPoint;
-
+            uniform sampler2D uNoiseTexture;
             varying vec2 vUv;
 
             float map(float value, float min1, float max1, float min2, float max2) {
               return clamp(min2 + (value - min1) * (max2 - min2) / (max1 - min1), min2, max2);
             }
 
+            float circle(in vec2 _st, in float _radius){
+                vec2 dist = _st-vec2(0.5);
+	return 1.-smoothstep(_radius-(_radius*0.9),
+                                     _radius+(_radius*0.09),
+                                     dot(dist,dist)*2.0);
+            }
+
+            float rand(vec2 n) {
+             	return fract(sin(dot(n, vec2(12.9898, 4.1414))) * 43758.5453);
+            }
+
+            float noise(vec2 p){
+             	vec2 ip = floor(p);
+             	vec2 u = fract(p);
+             	u = u*u*(3.0-2.0*u);
+
+             	float res = mix(
+              		mix(rand(ip),rand(ip+vec2(1.0,0.0)),u.x),
+              		mix(rand(ip+vec2(0.0,1.0)),rand(ip+vec2(1.0,1.0)),u.x),u.y);
+             	return res*res;
+            }
+
             void main() {
-                vec4 tex = texture2D(uTexture, vUv);
-                float distanceToFocusPoint = distance(vUv * vec2(3.0, 1.0), uFocusPoint);
-                float alpha = clamp(0.0, 1.0, tex.a * map(distanceToFocusPoint, 0.0, 0.5, 2.0, 1.0));
-                // float alpha = smoothstep(1.0, 0.0, distanceToFocusPoint * 2.0);
+              vec4 color = texture2D(uTexture, vUv);
+              vec3 noise1 = texture2D(uNoiseTexture, vec2(vUv.x * 0.3 + uTime, vUv.y * 0.05 + uTime)).rgb * 1.5;
+              float noise2 = noise(vUv * 1000. + uTime * 100.);
 
-                float fadeInAlpha = smoothstep(1.0, 0.0, vUv.x / (uTime * 0.6));
+              gl_FragColor.rgb = color.rgb;
+              gl_FragColor.a = (color.a / noise1.r) - noise2 * 0.1;
+              gl_FragColor.rgb = gl_FragColor.rgb * gl_FragColor.a;
 
-                gl_FragColor.rgb = tex.rgb;
-                gl_FragColor.a = (tex.a * alpha);
-                // gl_FragColor.a = tex.a;
-                gl_FragColor.rgb *= gl_FragColor.a;
             }
         `,
             uniforms: {
                 uTime: { value: 0 },
-                uFocusPoint: { value: [0.0, 0.5] },
                 uTexture: { value: texture },
+                uNoiseTexture: { value: noiseTexture },
+                uMouse: { value: [0.5, 0.5] },
+                uAspectRatio: { value: [1, img.height / img.width] },
             },
         });
 
@@ -87,13 +119,8 @@ const { class: className } = Astro.props;
         function update(t) {
             requestAnimationFrame(update);
 
-            program.uniforms.uTime.value = Math.max(0, t * 0.001 - 0.3);
-            program.uniforms.uFocusPoint.value = [
-                Math.sin(t * 0.0005) * 1.0 + 1.0,
-                Math.sin(t * 0.001) * 0.5 + 0.5,
-            ];
+            program.uniforms.uTime.value = t * 0.00005;
 
-            // Don't need a camera if camera uniforms aren't required
             renderer.render({ scene: mesh });
         }
     };
