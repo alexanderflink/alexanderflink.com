@@ -6,6 +6,7 @@ const { class: className } = Astro.props;
 
 <script>
     import { Renderer, Geometry, Program, Mesh, Texture } from "ogl";
+    import lerp from "../utils/lerp.ts";
     const logoCanvas = document.getElementById("logoCanvas");
 
     // update image value with source once loaded
@@ -62,21 +63,12 @@ const { class: className } = Astro.props;
             precision highp float;
 
             uniform float uTime;
-            uniform vec2 uAspectRatio;
+            uniform float uAspect;
+            uniform vec2 uMouse;
+            uniform float uMouseOpacity;
             uniform sampler2D uTexture;
             uniform sampler2D uNoiseTexture;
             varying vec2 vUv;
-
-            float map(float value, float min1, float max1, float min2, float max2) {
-              return clamp(min2 + (value - min1) * (max2 - min2) / (max1 - min1), min2, max2);
-            }
-
-            float circle(in vec2 _st, in float _radius){
-                vec2 dist = _st-vec2(0.5);
-	return 1.-smoothstep(_radius-(_radius*0.9),
-                                     _radius+(_radius*0.09),
-                                     dot(dist,dist)*2.0);
-            }
 
             float rand(vec2 n) {
              	return fract(sin(dot(n, vec2(12.9898, 4.1414))) * 43758.5453);
@@ -97,31 +89,60 @@ const { class: className } = Astro.props;
               vec4 color = texture2D(uTexture, vUv);
               vec3 noise1 = texture2D(uNoiseTexture, vec2(vUv.x * 0.3 + uTime, vUv.y * 0.05 + uTime)).rgb * 1.5;
               float noise2 = noise(vUv * 1000. + uTime * 100.);
+              float mouseCircle = smoothstep(2.0, 0.0, distance(vec2(vUv.x * uAspect, vUv.y), vec2(uMouse.x * uAspect, uMouse.y)));
+              float mouseEffect = mouseCircle * uMouseOpacity;
 
               gl_FragColor.rgb = color.rgb;
-              gl_FragColor.a = (color.a / noise1.r) - noise2 * 0.1;
+              gl_FragColor.a = (color.a / clamp(noise1.r - mouseEffect * 0.5, 0.0, 1.0)) - noise2 * 0.1;
+              // premultiply alpha
               gl_FragColor.rgb = gl_FragColor.rgb * gl_FragColor.a;
-
             }
         `,
             uniforms: {
                 uTime: { value: 0 },
                 uTexture: { value: texture },
                 uNoiseTexture: { value: noiseTexture },
-                uMouse: { value: [0.5, 0.5] },
-                uAspectRatio: { value: [1, img.height / img.width] },
+                uMouse: { value: [-1, -1] },
+                uAspect: { value: img.width / img.height },
+                uMouseOpacity: { value: 0 },
             },
         });
 
         const mesh = new Mesh(gl, { geometry, program });
+        let mousePos = { x: 0, y: 0 };
+        let mouseOpacity = 0;
 
         requestAnimationFrame(update);
         function update(t) {
             requestAnimationFrame(update);
 
-            program.uniforms.uTime.value = t * 0.00005;
+            const { uTime, uMouse, uMouseOpacity } = program.uniforms;
+            uTime.value = t * 0.00005;
+            uMouseOpacity.value = lerp(uMouseOpacity.value, mouseOpacity, 0.1);
+
+            const { value: mouse } = uMouse;
+            mouse[0] = lerp(mouse[0], mousePos.x, 0.1);
+            mouse[1] = lerp(mouse[1], mousePos.y, 0.1);
 
             renderer.render({ scene: mesh });
         }
+
+        logoCanvas.addEventListener("mouseenter", () => {
+            mouseOpacity = 1;
+        });
+
+        logoCanvas.addEventListener("mouseleave", () => {
+            mouseOpacity = 0;
+        });
+
+        // calculate mouse position on canvas, remap to 0-1
+        logoCanvas.addEventListener("mousemove", (e) => {
+            const rect = logoCanvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const targetX = x / rect.width;
+            const targetY = 1.0 - y / rect.height;
+            mousePos = { x: targetX, y: targetY };
+        });
     };
 </script>
