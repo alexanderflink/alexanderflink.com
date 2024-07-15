@@ -1,6 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import Article from "../components/Article.astro";
+import DownArrow from "../components/icons/DownArrow.astro";
 import { getCollection } from "astro:content";
 
 const recentPosts = await getCollection("blog");
@@ -9,9 +10,9 @@ const recentPosts = await getCollection("blog");
 <Layout title="alexanderflink.com">
     <section
         id="intro-text"
-        class="py-20 lg:py-48 intro-text col-span-full text-3xl font-light lg:text-4xl links"
+        class="h-[calc(100svh-var(--header-height))] flex flex-col justify-center intro-text col-span-full text-3xl font-light lg:text-4xl xl:text-5xl links"
     >
-        <div class="animation">
+        <div class="-mt-[10svh]">
             <p>
                 Web developer currently working at <a
                     href="https://noaignite.se">noaignite.se</a
@@ -31,8 +32,17 @@ const recentPosts = await getCollection("blog");
             </p>
         </div>
     </section>
+    <a
+        href="#blog"
+        class="group/arrow group-[.scrolled-down]:opacity-0 transition-opacity linear duration-300 absolute left-1/2 bottom-[10%]"
+    >
+        <span class="text-sm">Blog</span>
+        <DownArrow
+            class="size-6 group-hover/arrow:translate-y-2 transition-transform"
+        />
+    </a>
     <section class="col-span-full">
-        <h1 class="text-4xl">Blog</h1>
+        <h1 id="blog" class="text-4xl">Blog</h1>
         <ul class="mt-10">
             <li>
                 {
@@ -88,7 +98,3 @@ const recentPosts = await getCollection("blog");
         }
     }
 </style>
-
-<script>
-    document.addEventListener("astro:page-load", (e) => {});
-</script>
