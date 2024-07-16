@@ -1,0 +1,17 @@
+---
+interface Props {
+  title?: string;
+  level?: "info" | "warning" | "error" | "success";
+}
+
+const { title, level } = Astro.props;
+---
+
+{/* TODO: add support for other alert levels */}
+<div
+  class="bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4 [&>*]:mb-0"
+  role="alert"
+>
+  <p class="font-bold mt-0">⚠️ {title}</p>
+  <slot />
+</div>

@@ -5,54 +5,54 @@ const { class: className } = Astro.props;
 <canvas class={`${className} ${"aspect-[484/70]"}`} id="logoCanvas"></canvas>
 
 <script>
-    import { Renderer, Geometry, Program, Mesh, Texture } from "ogl";
-    import lerp from "../utils/lerp.ts";
-    import imagesLoaded from "../utils/imagesLoaded.ts";
-    const logoCanvas = document.getElementById("logoCanvas");
+  import { Renderer, Geometry, Program, Mesh, Texture } from "ogl";
+  import lerp from "~/utils/lerp.ts";
+  import imagesLoaded from "~/utils/imagesLoaded.ts";
+  const logoCanvas = document.getElementById("logoCanvas");
 
-    if (!logoCanvas) {
-        throw new Error("Canvas not found");
-    }
+  if (!logoCanvas) {
+    throw new Error("Canvas not found");
+  }
 
-    const img = new Image();
-    img.src = "/logo.png";
+  const img = new Image();
+  img.src = "/logo.png";
 
-    const noiseImage = new Image();
-    noiseImage.src = "/noise.jpg";
+  const noiseImage = new Image();
+  noiseImage.src = "/noise.jpg";
 
-    imagesLoaded([img, noiseImage], () => {
-        const renderer = new Renderer({
-            canvas: logoCanvas as HTMLCanvasElement,
-            width: img.width,
-            height: img.height,
-            alpha: true,
-        });
+  imagesLoaded([img, noiseImage], () => {
+    const renderer = new Renderer({
+      canvas: logoCanvas as HTMLCanvasElement,
+      width: img.width,
+      height: img.height,
+      alpha: true,
+    });
 
-        logoCanvas.style.width = "100%";
-        logoCanvas.style.height = "auto";
-        const gl = renderer.gl;
+    logoCanvas.style.width = "100%";
+    logoCanvas.style.height = "auto";
+    const gl = renderer.gl;
 
-        const texture = new Texture(gl);
-        texture.image = img;
+    const texture = new Texture(gl);
+    texture.image = img;
 
-        const noiseTexture = new Texture(gl, {
-            wrapS: gl.REPEAT,
-            wrapT: gl.REPEAT,
-            minFilter: gl.LINEAR_MIPMAP_LINEAR,
-        });
+    const noiseTexture = new Texture(gl, {
+      wrapS: gl.REPEAT,
+      wrapT: gl.REPEAT,
+      minFilter: gl.LINEAR_MIPMAP_LINEAR,
+    });
 
-        noiseTexture.image = noiseImage;
+    noiseTexture.image = noiseImage;
 
-        const geometry = new Geometry(gl, {
-            position: {
-                size: 2,
-                data: new Float32Array([-1, -1, 3, -1, -1, 3]),
-            },
-            uv: { size: 2, data: new Float32Array([0, 0, 2, 0, 0, 2]) },
-        });
+    const geometry = new Geometry(gl, {
+      position: {
+        size: 2,
+        data: new Float32Array([-1, -1, 3, -1, -1, 3]),
+      },
+      uv: { size: 2, data: new Float32Array([0, 0, 2, 0, 0, 2]) },
+    });
 
-        const program = new Program(gl, {
-            vertex: /* glsl */ `
+    const program = new Program(gl, {
+      vertex: /* glsl */ `
           attribute vec2 uv;
           attribute vec2 position;
 
@@ -63,8 +63,8 @@ const { class: className } = Astro.props;
               gl_Position = vec4(position, 0, 1);
           }
       `,
-            fragment: /* glsl */ `
-          precision highp float;
+      fragment: /* glsl */ `
+          precision mediump float;
 
           uniform float uTime;
           uniform float uAspect;
@@ -102,51 +102,51 @@ const { class: className } = Astro.props;
             gl_FragColor.rgb = gl_FragColor.rgb * gl_FragColor.a;
           }
       `,
-            uniforms: {
-                uTime: { value: 0 },
-                uTexture: { value: texture },
-                uNoiseTexture: { value: noiseTexture },
-                uMouse: { value: [-1, -1] },
-                uAspect: { value: img.width / img.height },
-                uMouseOpacity: { value: 0 },
-            },
-        });
-
-        const mesh = new Mesh(gl, { geometry, program });
-        let mousePos = { x: 0, y: 0 };
-        let mouseOpacity = 0;
-
-        requestAnimationFrame(update);
-        function update(t: number) {
-            requestAnimationFrame(update);
-
-            const { uTime, uMouse, uMouseOpacity } = program.uniforms;
-            uTime.value = t * 0.00005;
-            uMouseOpacity.value = lerp(uMouseOpacity.value, mouseOpacity, 0.1);
-
-            const { value: mouse } = uMouse;
-            mouse[0] = lerp(mouse[0], mousePos.x, 0.1);
-            mouse[1] = lerp(mouse[1], mousePos.y, 0.1);
-
-            renderer.render({ scene: mesh });
-        }
-
-        logoCanvas.addEventListener("mouseenter", () => {
-            mouseOpacity = 1;
-        });
-
-        logoCanvas.addEventListener("mouseleave", () => {
-            mouseOpacity = 0;
-        });
-
-        // calculate mouse position on canvas, remap to 0-1
-        logoCanvas.addEventListener("mousemove", (e) => {
-            const rect = logoCanvas.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            const targetX = x / rect.width;
-            const targetY = 1.0 - y / rect.height;
-            mousePos = { x: targetX, y: targetY };
-        });
+      uniforms: {
+        uTime: { value: 0 },
+        uTexture: { value: texture },
+        uNoiseTexture: { value: noiseTexture },
+        uMouse: { value: [-1, -1] },
+        uAspect: { value: img.width / img.height },
+        uMouseOpacity: { value: 0 },
+      },
     });
+
+    const mesh = new Mesh(gl, { geometry, program });
+    let mousePos = { x: 0, y: 0 };
+    let mouseOpacity = 0;
+
+    requestAnimationFrame(update);
+    function update(t: number) {
+      requestAnimationFrame(update);
+
+      const { uTime, uMouse, uMouseOpacity } = program.uniforms;
+      uTime.value = t * 0.00005;
+      uMouseOpacity.value = lerp(uMouseOpacity.value, mouseOpacity, 0.1);
+
+      const { value: mouse } = uMouse;
+      mouse[0] = lerp(mouse[0], mousePos.x, 0.1);
+      mouse[1] = lerp(mouse[1], mousePos.y, 0.1);
+
+      renderer.render({ scene: mesh });
+    }
+
+    logoCanvas.addEventListener("mouseenter", () => {
+      mouseOpacity = 1;
+    });
+
+    logoCanvas.addEventListener("mouseleave", () => {
+      mouseOpacity = 0;
+    });
+
+    // calculate mouse position on canvas, remap to 0-1
+    logoCanvas.addEventListener("mousemove", (e) => {
+      const rect = logoCanvas.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const targetX = x / rect.width;
+      const targetY = 1.0 - y / rect.height;
+      mousePos = { x: targetX, y: targetY };
+    });
+  });
 </script>
