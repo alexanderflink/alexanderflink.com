@@ -5,7 +5,7 @@ import BackArrow from "~/components/icons/BackArrow.astro";
 import { getEntryBySlug, getCollection } from "astro:content";
 
 export function getStaticPaths() {
-    return [{ params: { post: "hello-world" } }];
+  return [{ params: { post: "hello-world" } }];
 }
 
 const { post } = Astro.params;
@@ -15,12 +15,15 @@ const { Content } = await entry.render();
 ---
 
 <Layout title="Hello World">
-    <article class="col-span-full">
-        <a href="/" class="text-sm text-slate-400 space-x-2 flex items-center">
-            <BackArrow class="inline size-3" /><span class="inline">Home</span>
-        </a>
-        <Prose class="mt-4">
-            <Content />
-        </Prose>
-    </article>
+  <article class="col-span-full">
+    <Prose class="mt-4 mx-auto">
+      <a
+        href="/"
+        class="text-sm text-slate-400 space-x-2 flex items-center mb-4 no-underline"
+      >
+        <BackArrow class="inline size-3" /><span class="inline">Home</span>
+      </a>
+      <Content />
+    </Prose>
+  </article>
 </Layout>

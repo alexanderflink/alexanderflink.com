@@ -8,93 +8,106 @@ const recentPosts = await getCollection("blog");
 ---
 
 <Layout title="alexanderflink.com">
-    <section
-        id="intro-text"
-        class="h-[calc(100svh-var(--header-height))] flex flex-col justify-center intro-text col-span-full text-3xl font-light lg:text-4xl xl:text-5xl links"
-    >
-        <div class="-mt-[10svh]">
-            <p>
-                Web developer currently working at <a
-                    href="https://noaignite.se">noaignite.se</a
-                >
-            </p>
-            <p class="mt-6">
-                Find me on <a href="https://github.com/alexanderflink">github</a
-                > and <a
-                    href="https://www.linkedin.com/in/alexander-flink-842b1914a"
-                    >LinkedIn</a
-                >
-            </p>
-            <p class="text-xl mt-6 lg:mt-14">
-                or email me at <a href="mailto:hi@alexanderflink.com"
-                    >hi@alexanderflink.com</a
-                >
-            </p>
-        </div>
-    </section>
-    <a
-        href="#blog"
-        class="group/arrow group-[.scrolled-down]:opacity-0 transition-opacity linear duration-300 absolute left-1/2 bottom-[10%]"
-    >
-        <span class="text-sm">Blog</span>
-        <DownArrow
-            class="size-6 group-hover/arrow:translate-y-2 transition-transform"
-        />
-    </a>
-    <section class="col-span-full">
-        <h1 id="blog" class="text-4xl">Blog</h1>
-        <ul class="mt-10">
-            <li>
-                {
-                    recentPosts.map((post) => (
-                        <Article href={`/blog/${post.slug}`} {...post.data} />
-                    ))
-                }
-            </li>
-        </ul>
-    </section>
+  <section
+    id="intro-text"
+    class="h-[calc(100svh-var(--header-height))] flex flex-col justify-center intro-text col-span-full text-3xl font-light lg:text-4xl xl:text-5xl links"
+  >
+    <div class="-mt-[10svh]">
+      <p>
+        Web developer currently working at <a href="https://noaignite.se"
+          >noaignite.se</a
+        >
+      </p>
+      <p class="mt-6">
+        Find me on <a href="https://github.com/alexanderflink">github</a> and <a
+          href="https://www.linkedin.com/in/alexander-flink-842b1914a"
+          >LinkedIn</a
+        >
+      </p>
+      <p class="text-xl mt-6 lg:mt-14">
+        or email me at <a href="mailto:hi@alexanderflink.com"
+          >hi@alexanderflink.com</a
+        >
+      </p>
+    </div>
+  </section>
+  <a
+    href="#blog"
+    class="group/arrow group-[.scrolled-down]:opacity-0 transition-opacity linear duration-300 absolute left-1/2 -translate-x-1/2 bottom-[10%]"
+  >
+    <span class="text-sm">Blog</span>
+    <DownArrow
+      class="size-6 group-hover/arrow:translate-y-2 transition-transform"
+    />
+  </a>
+  <section class="col-span-full">
+    <h1 id="blog" class="text-4xl">Blog</h1>
+    <ul class="mt-10">
+      <li>
+        {
+          recentPosts.map((post) => (
+            <Article href={`/blog/${post.slug}`} {...post.data} />
+          ))
+        }
+      </li>
+    </ul>
+  </section>
 </Layout>
 
 <style>
-    .links {
-        a {
-            position: relative;
-            font-weight: 600;
-        }
-        a:hover::after {
-            animation:
-                underlines-scale 1s,
-                underlines-origin 1s step-end;
-        }
-        a::after {
-            z-index: -1;
-            content: " ";
-            height: 20%;
-            width: calc(100% + 10px);
-            bottom: 5px;
-            left: -5px;
-            background-color: yellow;
-            position: absolute;
-            @apply bg-yellow-300;
-            transform-origin: 100% 0%;
-        }
+  .links {
+    a {
+      position: relative;
+      font-weight: 600;
     }
+    a::after {
+      z-index: -1;
+      content: " ";
+      height: 20%;
+      width: calc(100% + 10px);
+      bottom: 5px;
+      left: -5px;
+      background-color: yellow;
+      position: absolute;
+      @apply bg-yellow-300;
+      transform-origin: 100% 0%;
+      translate: 0 0 0.1px;
+      animation:
+        underlines-scale 1s,
+        underlines-origin 1.01s step-end;
+      animation-play-state: paused;
+    }
+  }
 
-    @keyframes underlines-scale {
-        0% {
-            transform: scaleX(100%);
-        }
-        50% {
-            transform: scaleX(0%);
-        }
-        100% {
-            transform: scaleX(100%);
-        }
+  @keyframes underlines-scale {
+    0% {
+      transform: scaleX(100%);
     }
+    50% {
+      transform: scaleX(0%);
+    }
+    100% {
+      transform: scaleX(100%);
+    }
+  }
 
-    @keyframes underlines-origin {
-        50% {
-            transform-origin: 0% 0%;
-        }
+  @keyframes underlines-origin {
+    50% {
+      transform-origin: 0% 0%;
     }
+  }
 </style>
+
+<script>
+  // add javascript hover instead of css to avoid canceling the hover animations prematurely
+  const animatedLinks = document.querySelectorAll(".links a");
+  animatedLinks.forEach((link) => {
+    const animations = link.getAnimations({ subtree: true });
+
+    link.addEventListener("mouseenter", () => {
+      animations.forEach((animation) => {
+        animation.play();
+      });
+    });
+  });
+</script>
