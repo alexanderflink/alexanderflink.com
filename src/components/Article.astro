@@ -2,43 +2,39 @@
 import Tag from "./icons/Tag.astro";
 
 interface Props {
-    date: Date;
-    excerpt?: string;
-    href: string;
-    image?: string;
-    alt?: string;
-    title: string;
-    tags: string[];
+  date: Date;
+  excerpt?: string;
+  href: string;
+  image?: string;
+  alt?: string;
+  title: string;
+  tags: string[];
 }
 
 const { title, date, image, alt, excerpt, href, tags } = Astro.props;
 ---
 
 <article class="md: max-w-screen-sm lg:max-w-screen-md">
-    <a href={href}>
-        <div class="flex justify-between items-end">
-            <div>
-                <h1 class="font-serif text-2xl">{title}</h1>
-                <h2 class="text-xs font-bold inline">{date.toDateString()}</h2>
-            </div>
-            <ol class="text-right space-x-2">
-                {
-                    tags.map((tag) => (
-                        <li class="inline">
-                            <span class="text-xs">
-                                <Tag class="inline" />
-                                {tag}
-                            </span>
-                        </li>
-                    ))
-                }
-            </ol>
-        </div>
-        <img
-            src={image}
-            alt={alt || title}
-            class="mt-1 h-96 w-full object-cover"
-        />
-        <p class="text-lg mt-4">{excerpt}</p>
-    </a>
+  <a href={href}>
+    <div class="flex justify-between items-end">
+      <div>
+        <h1 class="font-serif text-3xl">{title}</h1>
+        <h2 class="text-xs font-bold inline">{date.toDateString()}</h2>
+      </div>
+      <ol class="text-right space-x-2">
+        {
+          tags.map((tag) => (
+            <li class="inline">
+              <span class="text-xs">
+                <Tag class="inline" />
+                {tag}
+              </span>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+    <img src={image} alt={alt || title} class="mt-1 h-96 w-full object-cover" />
+    <p class="text-lg mt-4">{excerpt}</p>
+  </a>
 </article>

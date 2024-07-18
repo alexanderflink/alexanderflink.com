@@ -10,7 +10,7 @@ const recentPosts = await getCollection("blog");
 <Layout title="alexanderflink.com">
   <section
     id="intro-text"
-    class="h-[calc(100svh-var(--header-height))] flex flex-col justify-center intro-text col-span-full text-3xl font-light lg:text-4xl xl:text-5xl links"
+    class="font-serif h-[calc(100svh-var(--header-height))] flex flex-col justify-center intro-text col-span-full text-3xl lg:text-4xl xl:text-5xl links [&_a]:font-sans [&_a]: font-light"
   >
     <div class="-mt-[10svh]">
       <p>
@@ -41,8 +41,12 @@ const recentPosts = await getCollection("blog");
     />
   </a>
   <section class="col-span-full">
-    <h1 id="blog" class="text-4xl">Blog</h1>
-    <ul class="mt-10">
+    <h1 id="blog" class="font-serif text-5xl">Blog</h1>
+    <p class="mt-6 text-lg">
+      Semi-regular posts about web development, design, and other things I find
+      interesting.
+    </p>
+    <ul class="mt-20">
       <li>
         {
           recentPosts.map((post) => (
@@ -58,7 +62,6 @@ const recentPosts = await getCollection("blog");
   .links {
     a {
       position: relative;
-      font-weight: 600;
     }
     a::after {
       z-index: -1;
