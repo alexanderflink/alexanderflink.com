@@ -1,11 +1,11 @@
 ---
 interface Props {
-    class?: string;
+  class?: string;
 }
 
 const { class: className } = Astro.props;
 ---
 
-<div class={`prose ${className}`}>
-    <slot />
+<div class={`prose prose-figure:my-10 ${className}`}>
+  <slot />
 </div>

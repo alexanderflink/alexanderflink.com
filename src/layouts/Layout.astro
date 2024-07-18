@@ -4,7 +4,7 @@ import MailIcon from "~/components/icons/Mail.astro";
 import GithubIcon from "~/components/icons/Github.astro";
 
 interface Props {
-    title: string;
+  title: string;
 }
 
 const { title } = Astro.props;
@@ -12,102 +12,99 @@ const { title } = Astro.props;
 
 <!doctype html>
 <html lang="en" class="h-full" transition:animate="none">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="description" content="Astro description" />
-        <meta name="viewport" content="width=device-width" />
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-        <meta name="generator" content={Astro.generator} />
-        <title>{title}</title>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link
-            href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=DM+Serif+Display:ital@0;1"
-            rel="stylesheet"
-        />
-    </head>
-    <body
-        class="group [--header-height:5rem] md:[--header-height:9rem] lg:[--header-height:14rem]"
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="Astro description" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=DM+Serif+Display:ital@0;1"
+      rel="stylesheet"
+    />
+  </head>
+  <body
+    class="group [--header-height:5rem] md:[--header-height:9rem] lg:[--header-height:14rem]"
+  >
+    <header
+      class="h-20 md:h-36 lg:h-56 fixed top-0 w-full backdrop-blur-md border-b border-gray-200 border-opacity-0 z-50 bg-neutral-50 bg-opacity-0 transition-all ease-in-out duration-500"
     >
-        <header
-            class="h-20 md:h-36 lg:h-56 fixed top-0 w-full backdrop-blur-md border-b border-gray-200 border-opacity-0 z-50 bg-white bg-opacity-0 transition-all ease-in-out duration-500"
-        >
-            <div
-                class="flex justify-between items-center px-5 md:px-10 lg:px-20 h-full w-full max-w-screen-xl mx-auto"
-            >
-                <a href="/" class="w-[50vw] min-w-60 max-w-96">
-                    <AnimatedLogo
-                        class="logo w-full h-auto transition-transform duration-500 origin-left"
-                    />
-                </a>
-                <nav
-                    class="-col-start-1 -col-end-3 flex gap-4 md:gap-7 lg:gap-10"
-                >
-                    <a href="mailto:hi@alexanderflink.com"
-                        ><MailIcon
-                            class="size-5 md:size-6 lg:size-7 hover:scale-110 transition-transform"
-                        /></a
-                    >
-                    <a href="https://github.com/alexanderflink" target="_blank"
-                        ><GithubIcon
-                            class="size-5 md:size-6 lg:size-7 hover:scale-110 transition-transform"
-                        /></a
-                    >
-                </nav>
-            </div>
-        </header>
-        <main
-            class="px-5 md:px-10 lg:px-20 h-full w-full max-w-screen-xl mx-auto flex-grow-1 space-y-10 py-20 md:py-36 lg:py-56 grid grid-cols-4 gap-x-4 md:grid-cols-8 lg:grid-cols-12"
-        >
-            <slot />
-        </main>
-        <div id="scroll-intersection" class="absolute top-0"></div>
-        <style is:global>
-            @tailwind base;
-            @tailwind components;
-            @tailwind utilities;
+      <div
+        class="flex justify-between items-center px-5 md:px-10 lg:px-20 h-full w-full max-w-screen-xl mx-auto"
+      >
+        <a href="/" class="w-[50vw] min-w-60 max-w-96">
+          <AnimatedLogo
+            class="logo w-full h-auto transition-transform duration-500 origin-left"
+          />
+        </a>
+        <nav class="-col-start-1 -col-end-3 flex gap-4 md:gap-7 lg:gap-10">
+          <a href="mailto:hi@alexanderflink.com"
+            ><MailIcon
+              class="size-5 md:size-6 lg:size-7 hover:scale-110 transition-transform"
+            /></a
+          >
+          <a href="https://github.com/alexanderflink" target="_blank"
+            ><GithubIcon
+              class="size-5 md:size-6 lg:size-7 hover:scale-110 transition-transform"
+            /></a
+          >
+        </nav>
+      </div>
+    </header>
+    <main
+      class="px-5 md:px-10 lg:px-20 h-full w-full max-w-screen-xl mx-auto flex-grow-1 space-y-10 py-20 md:py-36 lg:py-56 grid grid-cols-4 gap-x-4 md:grid-cols-8 lg:grid-cols-12"
+    >
+      <slot />
+    </main>
+    <div id="scroll-intersection" class="absolute top-0"></div>
+    <style is:global>
+      @tailwind base;
+      @tailwind components;
+      @tailwind utilities;
 
-            @layer base {
-                html {
-                    @apply text-black;
-                }
-            }
-            :root {
-            }
-            html {
-                scroll-behavior: smooth;
-            }
-            body.scrolled-down {
-                header {
-                    @apply border-opacity-100;
-                    height: clamp(48px, 10vw, 96px);
-                    @apply bg-opacity-80;
-                }
+      @layer base {
+        html {
+          @apply text-black;
+        }
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        @apply bg-neutral-50;
+      }
+      body.scrolled-down {
+        header {
+          @apply border-opacity-100;
+          height: clamp(48px, 10vw, 96px);
+          @apply bg-opacity-80;
+        }
 
-                .logo {
-                    @apply scale-75;
-                }
-            }
-        </style>
-        <script>
-            const scrollIntersection = document.querySelector(
-                "#scroll-intersection",
-            );
+        .logo {
+          @apply scale-75;
+        }
+      }
+    </style>
+    <script>
+      const scrollIntersection = document.querySelector("#scroll-intersection");
 
-            if (scrollIntersection) {
-                const observer = new IntersectionObserver(
-                    (entries) => {
-                        if (!entries[0].isIntersecting) {
-                            document.body.classList.add("scrolled-down");
-                        } else {
-                            document.body.classList.remove("scrolled-down");
-                        }
-                    },
-                    { rootMargin: "50px" },
-                );
-
-                observer.observe(scrollIntersection);
+      if (scrollIntersection) {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            if (!entries[0].isIntersecting) {
+              document.body.classList.add("scrolled-down");
+            } else {
+              document.body.classList.remove("scrolled-down");
             }
-        </script>
-    </body>
+          },
+          { rootMargin: "50px" },
+        );
+
+        observer.observe(scrollIntersection);
+      }
+    </script>
+  </body>
 </html>

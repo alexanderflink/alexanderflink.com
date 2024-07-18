@@ -1,0 +1,98 @@
+<canvas class="aspect-[484/70] max-w-full !h-auto" id="AnimatedLogo2Canvas"
+></canvas>
+
+<script>
+  import { Renderer, Geometry, Program, Mesh, Texture } from "ogl";
+  import imagesLoaded from "~/utils/imagesLoaded.ts";
+  const logoCanvas = document.getElementById("AnimatedLogo2Canvas");
+
+  if (!logoCanvas) {
+    throw new Error("Canvas not found");
+  }
+
+  const img = new Image();
+  img.src = "/logo.png";
+
+  const noiseImage = new Image();
+  noiseImage.src = "/noise.jpg";
+
+  imagesLoaded([img, noiseImage], () => {
+    const renderer = new Renderer({
+      canvas: logoCanvas as HTMLCanvasElement,
+      width: img.width,
+      height: img.height,
+      alpha: true,
+    });
+
+    const gl = renderer.gl;
+
+    const texture = new Texture(gl);
+    texture.image = img;
+
+    const noiseTexture = new Texture(gl, {
+      wrapS: gl.REPEAT,
+      wrapT: gl.REPEAT,
+      minFilter: gl.LINEAR_MIPMAP_LINEAR,
+    });
+
+    noiseTexture.image = noiseImage;
+
+    const geometry = new Geometry(gl, {
+      position: {
+        size: 2,
+        data: new Float32Array([-1, -1, 3, -1, -1, 3]),
+      },
+      uv: { size: 2, data: new Float32Array([0, 0, 2, 0, 0, 2]) },
+    });
+
+    const program = new Program(gl, {
+      vertex: /* glsl */ `
+        attribute vec2 uv;
+        attribute vec2 position;
+
+        varying vec2 vUv;
+
+        void main() {
+            vUv = uv;
+            gl_Position = vec4(position, 0, 1);
+        }
+    `,
+      fragment: /* glsl */ `
+        precision mediump float;
+
+        uniform float uTime;
+        uniform float uAspect;
+        uniform sampler2D uTexture;
+        uniform sampler2D uNoiseTexture;
+        varying vec2 vUv;
+
+        void main() {
+          vec4 color = texture2D(uTexture, vUv);
+          vec3 noise1 = texture2D(uNoiseTexture, vec2(vUv.x * 0.3 + uTime * .5, vUv.y * 0.05 + uTime * .5)).rgb * 1.8;
+
+          gl_FragColor.rgb = color.rgb;
+          gl_FragColor.a = (color.a / clamp(noise1.r * 0.5, 0.0, 1.0)) * 0.5;
+          // premultiply alpha
+          gl_FragColor.rgb = gl_FragColor.rgb * gl_FragColor.a;
+        }
+    `,
+      uniforms: {
+        uTime: { value: 0 },
+        uTexture: { value: texture },
+        uNoiseTexture: { value: noiseTexture },
+      },
+    });
+
+    const mesh = new Mesh(gl, { geometry, program });
+
+    requestAnimationFrame(update);
+    function update(t: number) {
+      requestAnimationFrame(update);
+
+      const { uTime } = program.uniforms;
+      uTime.value = t * 0.00005;
+
+      renderer.render({ scene: mesh });
+    }
+  });
+</script>

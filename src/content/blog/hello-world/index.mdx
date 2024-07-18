@@ -5,7 +5,8 @@ tags: [web, programming]
 image: /hello_world.webp
 excerpt: I've been meaning to create a blog about web and programming for a while and finally got around to it! Please enjoy occasional ramblings about web stuff and programming in general. Some personal stuff might sneak in as well.
 ---
-import AnimatedLogo1 from './AnimatedLogo1.astro'
+import AnimatedLogo2 from './AnimatedLogo2.astro'
+import AnimatedLogo3 from './AnimatedLogo3.astro'
 import Alert from '~/components/Alert.astro'
 
 # Hello, World!
@@ -22,110 +23,25 @@ I knew I wanted to build a simple blog website that's not encumbered by a ton of
 ## Sprinkling the "logo" with some eye candy
 To spice things up a little bit, I made the "logo" in the header by rendering a transparent .png image of the blurred text, and manipulating it using a fragment shader in WebGL. I opted for the tiny but excellent [ogl](https://github.com/oframe/ogl) library for the boilerplate WebGL code. The effect was *very* much inspired by the effect over at [blotter](https://blotter.js.org/), a cool WebGL text effect package. Below are the steps to achieve the effect.
 
-### The boilerplate code
-Here is the boilerplate code needed to render the .png image with the blurred text using [ogl](https://github.com/oframe/ogl). The image is then used as a texture in the WebGL fragment shader.
+1. Render the image of the blurred text to a canvas element.
+![Blurred text](/logo.png)
 
-<Alert level="warning" title="Note">
-If terms such as "geometry", "program", "texture" and "mesh" in this context are unfamiliar to you, I highly recommend checking out the excellent [WebGL Fundamentals](https://webglfundamentals.org/) website first.
-</Alert>
-
-First, we import the necessary modules and get the canvas element from the DOM.
-We then create the Image object that will be used to render the .png image.
-When the image has loaded we create the ogl Renderer, Texture and Geometry. The geometry in this case is simply a triangle that covers the entire canvas since we are just creating a fullscreen shader effect. Then we create the program which consists of a vertex shader, fragment shader and any uniforms. Finally, we create the Mesh which takes the geometry and the webgl program and start the render loop.
-
-```ts
-import { Renderer, Geometry, Program, Mesh, Texture } from "ogl";
-import imagesLoaded from "~/utils/imagesLoaded.ts";
-const logoCanvas = document.querySelector("#logoCanvas");
-
-if (!logoCanvas) {
-  throw new Error("Canvas not found");
-}
-
-const img = new Image();
-img.src = "/logo.png";
-
-img.onload = () => {
-  const renderer = new Renderer({
-    canvas: logoCanvas as HTMLCanvasElement,
-    width: img.width,
-    height: img.height,
-    alpha: true, // important for the transparent .png
-  });
-
-  const gl = renderer.gl;
-
-  const texture = new Texture(gl);
-  texture.image = img;
-
-  // This is the geometry for a fullscreen triangle
-  const geometry = new Geometry(gl, {
-    position: {
-      size: 2,
-      data: new Float32Array([-1, -1, 3, -1, -1, 3]),
-    },
-    uv: { size: 2, data: new Float32Array([0, 0, 2, 0, 0, 2]) },
-  });
-
-  const program = new Program(gl, {
-    vertex: ``, // the vertex shader will go here
-    fragment: ``, // the fragment shader will go here
-    uniforms: {
-      uTexture: { value: texture },
-    },
-  });
-
-  const mesh = new Mesh(gl, { geometry, program });
-
-  requestAnimationFrame(update);
-  function update(t: number) {
-    requestAnimationFrame(update);
-
-    renderer.render({ scene: mesh });
-  }
-};
-```
-
-### The vertex shader
-The vertex shader will be very simple since we are just rendering a fullscreen triangle. We just need to render the vertices at their given positions and pass the uv coordinates to the fragment shader. The following code goes inside the vertex property of the `Program` object as a string.
-
-The vertex shader simply takes the uv and position attributes given to it by the geometry we created and passes the uvs along (specified with the `varying` keyword) to the fragment shader. It also sets the
-position of the vertices using the reserved `gl_Position` variable.
-
-```glsl
-attribute vec2 uv;
-attribute vec2 position;
-
-varying vec2 vUv;
-
-void main() {
-    vUv = uv;
-    gl_Position = vec4(position, 0, 1);
-}
-```
-
-### The fragment shader
-Let's start out with a simple fragment shader that samples our texture and draws it on the canvas.
-
-First, we set the floating point precision used in the shader. `mediump` seems to be good enough, though you can set it to `highp` if you notice color banding or other artifacts. Then we declare a uniform for our texture, and a varying for the uv coordinates passed from the vertex shader. In the `main` function, we sample the texture at the given uv coordinates and set the fragment color to the color of the texture. The alpha value is set to the alpha value of the texture. Finally, we premultiply the alpha value with the color value to get the correct color when rendering the texture with transparency.
-
-```glsl
-precision mediump float;
-
-uniform sampler2D uTexture;
-varying vec2 vUv;
-
-void main() {
-  vec4 color = texture2D(uTexture, vUv);
-
-  gl_FragColor.rgb = color.rgb;
-  gl_FragColor.a = color.a;
-  // premultiply alpha
-  gl_FragColor.rgb = gl_FragColor.rgb * gl_FragColor.a;
-}
-```
+2. Multiply the alpha channel by the red (or any other) channel of a noise image which scrolls across the canvas.
+![Noise](/noise.jpg)
 
 <figure>
-  <AnimatedLogo1/>
-  <figcaption>Resulting image rendered with WebGL</figcaption>
+  <AnimatedLogo2 />
+  <figcaption>Resulting effect</figcaption>
 </figure>
+
+3. Multiply again by a more granular noise for a grain effect.
+
+4. Add a mouse effect that multiplies the alpha more where the mouse is hovering.
+
+<AnimatedLogo3 />
+
+And that's it!
+
+You can read the source [here]() if you're interested in how I implemented this. Feel free to copy it and use as you like!
+
+That's all I had to share for now. I look forward to writing more blog posts about all things web and programming related in the future. Thanks for reading!
