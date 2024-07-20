@@ -30,32 +30,34 @@ const { title } = Astro.props;
     class="group [--header-height:5rem] md:[--header-height:9rem] lg:[--header-height:14rem]"
   >
     <header
-      class="h-20 md:h-36 lg:h-56 fixed top-0 w-full backdrop-blur-md border-b border-gray-200 border-opacity-0 z-50 bg-neutral-50 bg-opacity-0 transition-all ease-in-out duration-500"
+      class="fixed top-0 z-50 h-20 w-full border-b border-gray-200 border-opacity-0 bg-neutral-50 bg-opacity-0 backdrop-blur-md transition-all duration-500 ease-in-out md:h-36 lg:h-56"
     >
       <div
-        class="flex justify-between items-center px-5 md:px-10 lg:px-20 h-full w-full max-w-screen-xl mx-auto"
+        class="mx-auto flex h-full w-full max-w-screen-xl items-center justify-between px-5 md:px-10 lg:px-20"
       >
         <a href="/" class="w-[50vw] min-w-60 max-w-96">
           <AnimatedLogo
-            class="logo w-full h-auto transition-transform duration-500 origin-left"
+            class="fade-in logo h-auto w-full origin-left transition-transform duration-500"
           />
         </a>
-        <nav class="-col-start-1 -col-end-3 flex gap-4 md:gap-7 lg:gap-10">
+        <nav
+          class="fade-in -col-start-1 -col-end-3 flex gap-4 [--intro-animation-delay:0.6s] md:gap-7 lg:gap-10"
+        >
           <a href="mailto:hi@alexanderflink.com"
             ><MailIcon
-              class="size-5 md:size-6 lg:size-7 hover:scale-110 transition-transform"
+              class="size-5 transition-transform hover:scale-110 md:size-6 lg:size-7"
             /></a
           >
           <a href="https://github.com/alexanderflink" target="_blank"
             ><GithubIcon
-              class="size-5 md:size-6 lg:size-7 hover:scale-110 transition-transform"
+              class="size-5 transition-transform hover:scale-110 md:size-6 lg:size-7"
             /></a
           >
         </nav>
       </div>
     </header>
     <main
-      class="px-5 md:px-10 lg:px-20 h-full w-full max-w-screen-xl mx-auto flex-grow-1 space-y-10 py-20 md:py-36 lg:py-56 grid grid-cols-4 gap-x-4 md:grid-cols-8 lg:grid-cols-12"
+      class="flex-grow-1 mx-auto grid h-full w-full max-w-screen-xl grid-cols-4 gap-x-4 space-y-10 px-5 py-20 md:grid-cols-8 md:px-10 md:py-36 lg:grid-cols-12 lg:px-20 lg:py-56"
     >
       <slot />
     </main>
@@ -72,6 +74,7 @@ const { title } = Astro.props;
       }
       html {
         scroll-behavior: smooth;
+        --intro-animation-delay: 0s;
       }
       body {
         @apply bg-neutral-50;
@@ -85,6 +88,19 @@ const { title } = Astro.props;
 
         .logo {
           @apply scale-75;
+        }
+      }
+
+      .fade-in {
+        animation: fade-in 1s ease-in-out var(--intro-animation-delay) backwards;
+      }
+
+      @keyframes fade-in {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
         }
       }
     </style>

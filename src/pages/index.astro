@@ -10,7 +10,7 @@ const recentPosts = await getCollection("blog");
 <Layout title="alexanderflink.com">
   <section
     id="intro-text"
-    class="font-serif h-[calc(100svh-var(--header-height))] flex flex-col justify-center intro-text col-span-full text-3xl lg:text-4xl xl:text-5xl links [&_a]:font-sans [&_a]: font-light"
+    class="fade-in intro-text links [&_a]: col-span-full flex h-[calc(100svh-var(--header-height))] flex-col justify-center font-serif text-3xl font-light [--intro-animation-delay:0.3s] lg:text-4xl xl:text-5xl [&_a]:font-sans"
   >
     <div class="-mt-[10svh]">
       <p>
@@ -24,7 +24,7 @@ const recentPosts = await getCollection("blog");
           >LinkedIn</a
         >
       </p>
-      <p class="text-xl mt-6 lg:mt-14">
+      <p class="mt-6 text-xl lg:mt-14">
         or email me at <a href="mailto:hi@alexanderflink.com"
           >hi@alexanderflink.com</a
         >
@@ -33,18 +33,18 @@ const recentPosts = await getCollection("blog");
   </section>
   <a
     href="#blog"
-    class="group/arrow group-[.scrolled-down]:opacity-0 transition-opacity linear duration-300 absolute left-1/2 -translate-x-1/2 bottom-[10%]"
+    class="fade-in group/arrow linear absolute bottom-[10%] left-1/2 -translate-x-1/2 transition-opacity duration-300 [--intro-animation-delay:1s] group-[.scrolled-down]:opacity-0"
   >
     <span class="text-sm">Blog</span>
     <DownArrow
-      class="size-6 group-hover/arrow:translate-y-2 transition-transform"
+      class="size-6 transition-transform group-hover/arrow:translate-y-2"
     />
   </a>
-  <section class="col-span-full">
+  <section class="fade-in col-span-full [--intro-animation-delay:1.5s]">
     <h1 id="blog" class="font-serif text-5xl">Blog</h1>
     <p class="mt-6 text-lg">
-      Semi-regular posts about web development, design, and other things I find
-      interesting.
+      Semi-regular posts about web development, programming, and other things I
+      find interesting.
     </p>
     <ul class="mt-20">
       <li>
@@ -77,7 +77,7 @@ const recentPosts = await getCollection("blog");
       translate: 0 0 0.1px;
       animation:
         underlines-scale 1s,
-        underlines-origin 1.01s step-end;
+        underlines-origin 1s step-end;
       animation-play-state: paused;
     }
   }

@@ -6,6 +6,8 @@ interface Props {
 const { class: className } = Astro.props;
 ---
 
-<div class={`prose prose-figure:my-10 ${className}`}>
+<div
+  class={`prose prose-figure:my-10 prose-headings:font-serif prose-headings:text-neutral-700 text-neutral-700 ${className}`}
+>
   <slot />
 </div>
