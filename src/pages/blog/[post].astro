@@ -11,18 +11,22 @@ export function getStaticPaths() {
 const { post } = Astro.params;
 const entry = await getEntryBySlug("blog", post);
 
+if (!entry) {
+  return { status: 404 };
+}
+
 const { Content } = await entry.render();
 ---
 
 <Layout title="Hello World">
-  <article class="col-span-full">
+  <article class="col-span-full max-w-screen-md">
+    <a
+      href="/"
+      class="mb-4 flex items-center space-x-2 text-sm text-slate-400 no-underline"
+    >
+      <BackArrow class="inline size-3" /><span class="inline">Home</span>
+    </a>
     <Prose class="mx-auto mt-4">
-      <a
-        href="/"
-        class="mb-4 flex items-center space-x-2 text-sm text-slate-400 no-underline"
-      >
-        <BackArrow class="inline size-3" /><span class="inline">Home</span>
-      </a>
       <Content />
     </Prose>
   </article>

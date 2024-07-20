@@ -14,7 +14,9 @@ interface Props {
 const { title, date, image, alt, excerpt, href, tags } = Astro.props;
 ---
 
-<article class="md: max-w-screen-sm lg:max-w-screen-md">
+<article
+  class="rounded-lg border bg-neutral-50 p-4 drop-shadow-xl md:max-w-screen-sm lg:max-w-screen-md"
+>
   <a href={href}>
     <div class="flex items-end justify-between">
       <div>
@@ -34,7 +36,11 @@ const { title, date, image, alt, excerpt, href, tags } = Astro.props;
         }
       </ol>
     </div>
-    <img src={image} alt={alt || title} class="mt-1 h-96 w-full object-cover" />
+    <img
+      src={image}
+      alt={alt || title}
+      class="mt-1 h-96 w-full rounded object-cover"
+    />
     <p class="mt-4 text-lg">{excerpt}</p>
   </a>
 </article>
