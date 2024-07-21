@@ -4,7 +4,11 @@ import Article from "~/components/Article.astro";
 import DownArrow from "~/components/icons/DownArrow.astro";
 import { getCollection } from "astro:content";
 
-const recentPosts = await getCollection("blog");
+const posts = await getCollection("blog");
+
+const recentPosts = posts.sort((a, b) => {
+  return new Date(b.data.date).getTime() - new Date(a.data.date).getTime();
+});
 ---
 
 <Layout title="alexanderflink.com">
