@@ -49,7 +49,7 @@ const recentPosts = await getCollection("blog");
     <ul class="mt-20 grid auto-rows-fr gap-8 lg:grid-cols-2">
       {
         recentPosts.map((post) => (
-          <li>
+          <li class="@container">
             <Article
               class="h-full"
               href={`/blog/${post.slug}`}
