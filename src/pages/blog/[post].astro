@@ -4,7 +4,6 @@ import Prose from "~/components/Prose.astro";
 import BackArrow from "~/components/icons/BackArrow.astro";
 import { getEntryBySlug, getCollection } from "astro:content";
 
-// TODO: fetch all posts and generate static paths
 export async function getStaticPaths() {
   const posts = await getCollection("blog");
   return posts.map((post) => ({ params: { post: post.slug } }));
@@ -17,10 +16,11 @@ if (!entry) {
   return { status: 404 };
 }
 
+const { title } = entry.data;
 const { Content } = await entry.render();
 ---
 
-<Layout title="Hello World">
+<Layout title={title}>
   <article class="col-span-full max-w-screen-md">
     <a
       href="/"

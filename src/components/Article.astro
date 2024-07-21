@@ -1,6 +1,7 @@
 ---
 import { twMerge } from "tailwind-merge";
 import Tag from "./icons/Tag.astro";
+import { Image } from "astro:assets";
 
 interface Props {
   date: Date;
@@ -50,11 +51,17 @@ const {
         }
       </ol>
     </div>
-    <img
-      src={image}
-      alt={alt || title}
-      class="mt-1 h-96 w-full rounded object-cover"
-    />
+    {
+      image && (
+        <Image
+          width={500}
+          height={500}
+          src={image}
+          alt={alt || title}
+          class="mt-1 h-96 w-full rounded object-cover"
+        />
+      )
+    }
     <p class="mt-4 text-lg">{excerpt}</p>
   </a>
 </article>

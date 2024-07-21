@@ -7,7 +7,7 @@ const { class: className } = Astro.props;
 ---
 
 <div
-  class={`prose-lg prose-figure:my-10 prose-a:underline prose-a:font-bold prose-headings:font-serif prose-headings:text-neutral-700 text-neutral-700 ${className}`}
+  class={`prose md:prose-lg lg:prose-xl prose-figure:my-10 prose-headings:font-serif prose-headings:text-neutral-700 text-neutral-700 ${className}`}
 >
   <slot />
 </div>
