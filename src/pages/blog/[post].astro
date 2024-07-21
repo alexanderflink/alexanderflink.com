@@ -4,8 +4,10 @@ import Prose from "~/components/Prose.astro";
 import BackArrow from "~/components/icons/BackArrow.astro";
 import { getEntryBySlug, getCollection } from "astro:content";
 
-export function getStaticPaths() {
-  return [{ params: { post: "hello-world" } }];
+// TODO: fetch all posts and generate static paths
+export async function getStaticPaths() {
+  const posts = await getCollection("blog");
+  return posts.map((post) => ({ params: { post: post.slug } }));
 }
 
 const { post } = Astro.params;
@@ -22,7 +24,7 @@ const { Content } = await entry.render();
   <article class="col-span-full max-w-screen-md">
     <a
       href="/"
-      class="mb-4 flex items-center space-x-2 text-sm text-slate-400 no-underline"
+      class="mb-10 flex items-center space-x-2 text-sm text-slate-400 no-underline"
     >
       <BackArrow class="inline size-3" /><span class="inline">Home</span>
     </a>

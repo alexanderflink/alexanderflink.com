@@ -46,14 +46,18 @@ const recentPosts = await getCollection("blog");
       Semi-regular posts about web development, programming, and other things I
       find interesting.
     </p>
-    <ul class="mt-20">
-      <li>
-        {
-          recentPosts.map((post) => (
-            <Article href={`/blog/${post.slug}`} {...post.data} />
-          ))
-        }
-      </li>
+    <ul class="mt-20 grid auto-rows-fr gap-8 lg:grid-cols-2">
+      {
+        recentPosts.map((post) => (
+          <li>
+            <Article
+              class="h-full"
+              href={`/blog/${post.slug}`}
+              {...post.data}
+            />
+          </li>
+        ))
+      }
     </ul>
   </section>
 </Layout>

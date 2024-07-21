@@ -1,4 +1,5 @@
 ---
+import { twMerge } from "tailwind-merge";
 import Tag from "./icons/Tag.astro";
 
 interface Props {
@@ -9,18 +10,31 @@ interface Props {
   alt?: string;
   title: string;
   tags: string[];
+  class?: string;
 }
 
-const { title, date, image, alt, excerpt, href, tags } = Astro.props;
+const {
+  class: className,
+  title,
+  date,
+  image,
+  alt,
+  excerpt,
+  href,
+  tags,
+} = Astro.props;
 ---
 
 <article
-  class="rounded-lg border bg-neutral-50 p-4 drop-shadow-xl md:max-w-screen-sm lg:max-w-screen-md"
+  class={twMerge(
+    className,
+    "rounded-lg border bg-neutral-50 p-5 drop-shadow-xl md:max-w-screen-sm lg:max-w-screen-md hover:bg-neutral-100 transition-colors duration-300",
+  )}
 >
   <a href={href}>
-    <div class="flex items-end justify-between">
+    <h1 class="font-serif text-3xl">{title}</h1>
+    <div class="mt-4 flex items-end justify-between">
       <div>
-        <h1 class="font-serif text-3xl">{title}</h1>
         <h2 class="inline text-xs font-bold">{date.toDateString()}</h2>
       </div>
       <ol class="space-x-2 text-right">
