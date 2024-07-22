@@ -29,7 +29,7 @@ const {
 <article
   class={twMerge(
     className,
-    "rounded-lg @md:bg-neutral-50 @md:p-5 @md:drop-shadow-xl transition-colors duration-300 hover:bg-neutral-100 md:max-w-screen-sm lg:max-w-screen-md",
+    "rounded-lg @lg:bg-neutral-50 @lg:p-5 @lg:drop-shadow-xl transition-colors duration-300 hover:bg-neutral-100 md:max-w-screen-md",
   )}
 >
   <a href={href}>
@@ -51,17 +51,6 @@ const {
         }
       </ol>
     </div>
-    {
-      image && (
-        <Image
-          width={500}
-          height={500}
-          src={image}
-          alt={alt || title}
-          class="mt-1 h-96 w-full rounded object-cover"
-        />
-      )
-    }
     <p class="mt-4 text-lg">{excerpt}</p>
   </a>
 </article>
