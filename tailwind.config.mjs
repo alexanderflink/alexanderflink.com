@@ -1,6 +1,5 @@
 /** @type {import('tailwindcss').Config} */
 import colors from "tailwindcss/colors";
-
 export default {
   content: ["./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}"],
   theme: {
@@ -9,9 +8,17 @@ export default {
         serif: ["DM Serif Display"],
         sans: ["DM Sans"],
       },
-      colors: {
-        black: colors.neutral[700],
-      },
+    },
+    colors: {
+      transparent: "transparent",
+      current: "currentColor",
+      inherit: "inherit",
+      black: colors.black,
+      white: colors.white,
+      gray: colors.stone,
+      orange: colors.orange,
+      yellow: colors.yellow,
+      slate: colors.slate,
     },
   },
   plugins: [

@@ -1,9 +1,22 @@
 ---
+interface Props {
+  class: string;
+}
+
 const { class: className } = Astro.props;
 ---
 
 <canvas class={`${className} ${"aspect-[484/70]"}`} id="logoCanvas"></canvas>
 
+<script is:inline>
+  // check if is dark mode
+  const isDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches;
+  const logoCanvas = document.getElementById("logoCanvas");
+
+  if (logoCanvas) {
+    logoCanvas.dataset.invertColors = isDarkMode;
+  }
+</script>
 <script>
   import { Renderer, Geometry, Program, Mesh, Texture } from "ogl";
   import lerp from "~/utils/lerp.ts";
@@ -13,6 +26,9 @@ const { class: className } = Astro.props;
   if (!logoCanvas) {
     throw new Error("Canvas not found");
   }
+
+  const invertColors =
+    logoCanvas.dataset.invertColors === "true" ? true : false;
 
   const img = new Image();
   img.src = "/logo.png";
@@ -72,6 +88,7 @@ const { class: className } = Astro.props;
           uniform float uMouseOpacity;
           uniform sampler2D uTexture;
           uniform sampler2D uNoiseTexture;
+          uniform bool uInvertColors;
           varying vec2 vUv;
 
           float rand(vec2 n) {
@@ -98,6 +115,10 @@ const { class: className } = Astro.props;
 
             gl_FragColor.rgb = color.rgb;
             gl_FragColor.a = (color.a / clamp(noise1.r - mouseEffect * 0.5, 0.0, 1.0)) - noise2 * 0.1;
+            // invert colors
+            if (uInvertColors) {
+              gl_FragColor.rgb = 1.0 - gl_FragColor.rgb;
+            }
             // premultiply alpha
             gl_FragColor.rgb = gl_FragColor.rgb * gl_FragColor.a;
           }
@@ -109,6 +130,7 @@ const { class: className } = Astro.props;
         uMouse: { value: [-1, -1] },
         uAspect: { value: img.width / img.height },
         uMouseOpacity: { value: 0 },
+        uInvertColors: { value: invertColors },
       },
     });
 
