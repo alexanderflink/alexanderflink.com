@@ -1,4 +1,5 @@
 ---
+import { twMerge } from "tailwind-merge";
 interface Props {
   class?: string;
 }
@@ -7,7 +8,10 @@ const { class: className } = Astro.props;
 ---
 
 <div
-  class={`prose md:prose-lg lg:prose-xl prose-figure:my-10 prose-headings:font-serif prose-headings:text-current text-current prose-a:text-current ${className}`}
+  class={twMerge(
+    className,
+    "prose text-current md:prose-lg lg:prose-xl prose-headings:font-serif prose-headings:text-current prose-a:text-current prose-figure:my-10 prose-code:text-current",
+  )}
 >
   <slot />
 </div>
