@@ -34,7 +34,7 @@ To spice things up a little bit, I made the "logo" in the header by rendering a 
 
 And that's it!
 
-![Animated Logo](/src/content/blog/hello-world/animated-logo.webp)
+![Animated Logo](~/content/blog/hello-world/animated-logo.webp)
 
 You can read the source [here](https://github.com/alexanderflink/alexanderflink.com/blob/main/src/components/AnimatedLogo.astro) if you're interested in how I implemented this. Feel free to copy it and use as you like!
 
