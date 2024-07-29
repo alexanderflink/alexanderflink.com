@@ -3,6 +3,7 @@ import { twMerge } from "tailwind-merge";
 import AnimatedLogo from "~/components/AnimatedLogo.astro";
 import MailIcon from "~/components/icons/Mail.astro";
 import GithubIcon from "~/components/icons/Github.astro";
+import RssIcon from "~/components/icons/Rss.astro";
 
 interface Props {
   title: string;
@@ -66,7 +67,20 @@ const isFrontPage = Astro.url.pathname === "/";
     >
       <slot />
     </main>
+    <footer
+      class="mx-auto flex h-full w-full max-w-screen-xl gap-4 px-5 py-20 md:gap-10 md:px-10 lg:px-20"
+    >
+      <a href="/rss.xml" class="flex grow items-center gap-1"
+        >Subscribe<RssIcon />
+      </a>
+      <a href="https://github.com/alexanderflink">Github</a>
+      <a href="https://www.linkedin.com/in/alexander-flink-842b1914a"
+        >LinkedIn</a
+      >
+      <a href="mailto:hi@alexanderflink.com">Email</a>
+    </footer>
     <div id="scroll-intersection" class="absolute top-0"></div>
+
     <style is:global>
       @tailwind base;
       @tailwind components;
