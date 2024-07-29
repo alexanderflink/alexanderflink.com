@@ -6,10 +6,6 @@ image: /src/content/blog/hello-world/hello_world.webp
 excerpt: I've been meaning to create a blog about web and programming for a while and finally got around to it! Please enjoy occasional ramblings about web stuff and programming in general. Some personal stuff might sneak in as well.
 ---
 
-import AnimatedLogo2 from "./AnimatedLogo2.astro";
-import AnimatedLogo3 from "./AnimatedLogo3.astro";
-import Alert from "~/components/Alert.astro";
-
 # Hello, World!
 
 I've been working with web for quite a while, and creating a blog about web and programming in general is something I've had in mind but never got around to doing. So here it is, my little corner of the internet where I'll aim to occasionally post ramblings about web development and things I've built.
@@ -32,18 +28,16 @@ To spice things up a little bit, I made the "logo" in the header by rendering a 
 2. Multiply the alpha channel by the red (or any other) channel of a noise image which scrolls across the canvas.
    ![Noise](/noise.jpg)
 
-<figure>
-  <AnimatedLogo2 />
-  <figcaption>Resulting effect</figcaption>
-</figure>
-
 3. Multiply again by a more granular noise for a grain effect.
 
 4. Add a mouse effect that multiplies the alpha more where the mouse is hovering.
 
-<AnimatedLogo3 />
-
 And that's it!
+
+<figure>
+  <img src="/src/content/blog/hello-world/animated-logo.webp">
+  <figcaption>Resulting effect</figcaption>
+</figure>
 
 You can read the source [here](https://github.com/alexanderflink/alexanderflink.com/blob/main/src/components/AnimatedLogo.astro) if you're interested in how I implemented this. Feel free to copy it and use as you like!
 
