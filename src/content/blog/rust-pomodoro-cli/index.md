@@ -1,6 +1,6 @@
 ---
 title: A Pomodoro CLI written in Rust
-date: 2024-07-31
+date: 2024-08-02 19:50:00
 tags: [programming, rust]
 excerpt: I built a small Pomodoro CLI in Rust and learned Async Rust is difficult.
 ---
